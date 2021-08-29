@@ -1,0 +1,51 @@
+ /*
+Sensor jarak HC-SR04
+pin yang perlu dihubungkan
+VCC to arduino 5v
+GND to arduino GND
+Echo to Arduino pin 6
+Trig to Arduino pin 5
+*/
+ 
+#define echoPin 6 //Echo Pin
+#define trigPin 5 //Trigger Pin
+#define LEDPin 13 //Led default dari Arduino uno
+ 
+int maximumRange = 10; //kebutuhan akan maksimal range
+int minimumRange = 00; //kebutuhan akan minimal range
+long duration, distance; //waktu untuk kalkulasi jarak
+ 
+void setup() {
+Serial.begin (9600); //inisialiasasi komunikasi serial
+//deklarasi pin
+pinMode(trigPin, OUTPUT);
+pinMode(echoPin, INPUT);
+pinMode(LEDPin, OUTPUT);
+}
+ 
+void loop() {
+/* Berikut siklus trigPin atau echo pin yang digunakan
+untuk menentukan jarak objek terdekat dengan memantulkan
+gelombang suara dari itu. */
+digitalWrite(trigPin, LOW);delayMicroseconds(10);
+digitalWrite(trigPin, HIGH);delayMicroseconds(10);
+digitalWrite(trigPin, LOW);
+duration = pulseIn(echoPin, HIGH);
+ 
+//perhitungan untuk dijadikan jarak
+distance = duration/58.2;
+ 
+/* Kirim angka negatif ke komputer dan Turn LED ON 
+untuk menunjukkan "di luar jangkauan" */
+ 
+if (distance <= 5) digitalWrite(LEDPin, HIGH);
+  if (distance > 9 && distance <= 12) digitalWrite(LEDPin, LOW);
+
+  Serial.println(distance);
+  digitalWrite(LEDPin,HIGH);
+//Serial.println("-1");digitalWrite(LEDPin, HIGH);
+
+ 
+//waktu tunda 50mS
+delay(50);
+}
